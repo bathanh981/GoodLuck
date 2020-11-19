@@ -10,11 +10,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace GoodLuck.ViewModel
 {
-    class BeamViewModel : BaseViewModel
+   public  class BeamViewModel : BaseViewModel
     {
         public ProjectInformation ProjectInformation { get; set; }
         public string Combo { get; set; }
@@ -23,6 +24,7 @@ namespace GoodLuck.ViewModel
         public ICommand ResetBeamSoBoCommand { get; set; }
         public ICommand DesignBeamSoBoCommand { get; set; }
         public ICommand ResetBeamCommand { get; set; }
+        public ICommand ExportBeamCommand { get; set; }
         public ICommand AddBeamDesignFullCommand { get; set; }
 
         public Selected Selected { get; set; }
@@ -85,6 +87,46 @@ namespace GoodLuck.ViewModel
                 BeamDesignFulls.Add(BeamDesignFull);
                 BeamDesignFull = new BeamDesignFull();
             });
+            ExportBeamCommand = new RelayCommand<object>((p) =>
+            {
+                if (BeamDesignFulls == null || BeamDesignFulls.Count == 0) return false;
+                return true;
+            }, (p) =>
+            {
+                ExportBeam();
+            });
+        }
+
+        public void ExportBeam()
+        {
+           SaveFileDialog dialog = new SaveFileDialog();
+            string filePath = "";
+            dialog.Filter = "Excel | *.xlsx | Excel 2003 | *.xls";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                filePath = dialog.FileName;
+            }
+            if (string.IsNullOrEmpty(filePath))
+            {
+                System.Windows.Forms.MessageBox.Show("Đường dẫn báo cáo không hợp lệ");
+                return;
+            }
+            else
+            {
+                try
+                {
+                    //string path = "D:\\THXD\\DATN\\ChuyendeEtabs\\Program\\GoodLuck\\bin\\Debug\\Resource";
+                    ExcelModel.ExportToExcel excel = new ExcelModel.ExportToExcel();
+                    excel.ExportFloor(this, "Resource\\ThietkedamTCVN5574-2018.xlsx", filePath);
+                    System.Windows.Forms.MessageBox.Show("Xuất file thành công", "Thông báo");
+                }
+                catch (Exception e)
+                {
+                    System.Windows.Forms.MessageBox.Show("Có lỗi khi Export file. Hãy kiểm tra lại!", "Thông báo");
+                }
+
+            }
+
         }
     }
 }

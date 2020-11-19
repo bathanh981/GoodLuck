@@ -18,6 +18,9 @@ namespace GoodLuck.Model
 
         public ProjectInformation()
         {
+            ProjectName = " Khu đô thị An Hoa";
+            Address = "Quận Sơn Trà, Tp Đà Nẵng";
+            EngineerName = "Trần Bá Thanh";
         }
 
         public ProjectInformation(string projectName, string address, string engineerName)

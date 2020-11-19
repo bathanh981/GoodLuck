@@ -22,8 +22,8 @@ namespace GoodLuck.View
 
         public BeamDesingWindow(Model.ProjectInformation projectInformation)
         {
+            InitializeComponent();
             this.DataContext = new ViewModel.BeamViewModel(projectInformation);
-           
             this.combolist.ItemsSource = new Model.Etabs.LoadCombinations().MyName;
             cbxChonBetong.ItemsSource = Model.Material.MaterialDB.ConcreteProperties;
             cbxChonThepChu.ItemsSource = Model.Material.MaterialDB.SteelProperties;

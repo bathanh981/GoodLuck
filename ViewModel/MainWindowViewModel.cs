@@ -15,6 +15,7 @@ namespace GoodLuck.ViewModel
 
         public MainWindowViewModel()
         {
+            ProjectInformation = new ProjectInformation();
             DesignBeamCommand = new RelayCommand<object>((p) => { return true; }, (p) => { View.BeamDesingWindow wd = new View.BeamDesingWindow(ProjectInformation); wd.Show(); });
             DesignColumnCommand  = new RelayCommand<object>((p) => { return true; }, (p) => { View.ColumnDesignWindow wd = new View.ColumnDesignWindow(); wd.Show(); });
             DesignWallCommand  = new RelayCommand<object>((p) => { return true; }, (p) => { View.WallDesignWindow wd = new View.WallDesignWindow(); wd.Show(); });
