@@ -1,0 +1,124 @@
+﻿<Window x:Class="GoodLuck.View.BeamDesingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GoodLuck.View"
+        mc:Ignorable="d"
+        xmlns:etabs="clr-namespace:GoodLuck.Model.Etabs"
+        Title="Thiết kế dầm theo TCVN 5574-2018" Height="400" Width="900">
+    <Grid>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="5">
+
+            <TextBlock HorizontalAlignment="Center" Text="Danh sách dầm đã thiết kế"/>
+            <ListView ItemsSource="{Binding BeamDesignFulls}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="80" Header="Tầng" DisplayMemberBinding="{Binding BeamDesigns[0].BeamProperties.Story}"/>
+                        <GridViewColumn Width="80" Header="Tên CAD">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Width="70" Text="{Binding NameBeam}" IsReadOnly="False"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="80" Header="Số thanh" DisplayMemberBinding="{Binding BeamDesigns.Count}"/>
+                        <GridViewColumn Width="80" Header="Length" DisplayMemberBinding="{Binding Length}"/>
+
+                    </GridView>
+                    
+                </ListView.View>
+            </ListView>
+            <DockPanel Margin="0,5,0,0">
+                <Button Width="100" Margin="20,0,0,0" Content="Import excel"/>
+                <Button Width="100" Margin="20,0,0,0" Content="Export excel"/>
+                <Button  HorizontalAlignment="Left"  Margin="20,0,0,0" Width="100" Content="Design"/>
+                <Button  HorizontalAlignment="Left"  Margin="20,0,0,0" Width="100" Content="Xóa"/>
+            </DockPanel>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Margin="5">
+            <TextBlock HorizontalAlignment="Center" Text="Danh sách dầm chọn"/>
+            <DockPanel>
+                <ListView Margin="0,0,5,0" ItemsSource="{Binding BeamDesignFull.BeamDesigns,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding BeamSoBo}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Width="50" DisplayMemberBinding="{Binding BeamProperties.Story}" Header="Tầng"/>
+                            <GridViewColumn Width="auto" Header="Tên Farme" DisplayMemberBinding="{Binding BeamProperties.NameNumber}"  />
+                            <GridViewColumn Width="50" Header="Cao" DisplayMemberBinding="{Binding BeamProperties.Depth}"/>
+                            <GridViewColumn Width="50" Header="Rộng" DisplayMemberBinding="{Binding BeamProperties.Width}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <StackPanel>
+                    <ComboBox ToolTip="Chọn Tổ hợp tính toán" Width="50" Name="combolist" SelectedValue="{Binding Combo}" />
+                    <Button  Margin="0,5,0,0" Content="Select" Command="{Binding SelectedCommand}"/>
+                    <Button  Margin="0,5,0,0" Content="Design" Command="{Binding DesignBeamSoBoCommand}"/>
+                    <Button Margin="0,5,0,0" Content="Delete" Command="{Binding DeleteBeamSoBoCommand}"/>
+                    <Button Margin="0,5,0,0" Content="Reset" Command="{Binding ResetBeamSoBoCommand}"/>
+                </StackPanel>
+            </DockPanel>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+            <TextBlock HorizontalAlignment="Center" Text="Thiết kế dầm"/>
+            <DataGrid Margin="5" ItemsSource="{Binding BeamDesignFull.ReinforcementBeamMasters}"  
+                       CanUserSortColumns="False"
+                          CanUserAddRows="False"
+                          AutoGenerateColumns="False"
+                           Height="auto" MaxHeight="750" MaxColumnWidth="80" CellEditEnding="DataGrid_CellEditEnding">
+                    <DataGrid.Columns>
+                    <DataGridTextColumn Width="60"  Header="Tên dầm" Binding="{Binding NameFramce}"/>
+                    <DataGridTextColumn Width="60"  Header="Vị trí" Binding="{Binding Location}"/>
+                    <DataGridTextColumn Width="50" Header="Ho" Binding="{Binding Ho ,StringFormat={}{0:F2},Mode=OneWay}"/>
+                    <DataGridTextColumn Width="auto" Header="M(Kn)" Binding="{Binding MFormat,StringFormat={}{0:F2},Mode=OneWay}"/>
+                    <DataGridTextColumn Width="auto" Header="As" Binding="{Binding As,StringFormat={}{0:F2},Mode=OneWay}"/>
+                    <DataGridComboBoxColumn Width="auto" MinWidth="60" Header="&#8709;1" x:Name="phi1" SelectedValueBinding="{Binding ChooseSteel1.Phi,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridComboBoxColumn Width="auto" MinWidth="60" Header="n1" x:Name="n1" SelectedValueBinding="{Binding ChooseSteel1.Quantity,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                        </DataGridComboBoxColumn>
+                    <DataGridComboBoxColumn Width="auto" MinWidth="60" Header="&#8709;2" x:Name="phi2" SelectedValueBinding="{Binding ChooseSteel2.Phi,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                    </DataGridComboBoxColumn>
+                    <DataGridComboBoxColumn Width="auto" MinWidth="60" Header="n2" x:Name="n2" SelectedValueBinding="{Binding ChooseSteel2.Quantity,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                        </DataGridComboBoxColumn>
+                    <DataGridTextColumn Width="50" Header="As ch" Binding="{Binding AsChon,StringFormat={}{0:F2},Mode=OneWay}"/>
+                    <DataGridTextColumn Width="55" Header="Check As" Binding="{Binding CheckAs,Mode=OneWay}"/>
+                    <DataGridTextColumn Width="50"  Header="X" Binding="{Binding X,StringFormat={}{0:F2},Mode=OneWay}"/>
+                    <DataGridTextColumn Width="50" Header="Mu(Kn)" Binding="{Binding MuFormat,StringFormat={}{0:F2},Mode=OneWay}"/>
+                    <DataGridTextColumn Width="55" Header="Check &#949;" Binding="{Binding CheckEpxilon,Mode=OneWay}"/>
+                    <DataGridTextColumn Width="55" Header="Check M" Binding="{Binding CheckMu,Mode=OneWay}"/>
+                    <DataGridTextColumn Width="55" Header="Check &#956;" Binding="{Binding CheckNhuy,Mode=OneWay}"/>
+                    </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+        <DockPanel Grid.Row="2" Grid.ColumnSpan="2"  VerticalAlignment="Bottom">
+            <ComboBox ToolTip="Chọn bê tông" Width="auto" Margin="10,0,0,10"  Name="cbxChonBetong" SelectedItem="{Binding BeamDesignFull.BeamModel.ConcreteProperties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   DisplayMemberPath="ConcreteName"  Text="-- Chọn bê tông --"/>
+            <ComboBox ToolTip="Chọn thép chủ" Width="auto" Margin="10,0,0,10" Name="cbxChonThepChu" HorizontalAlignment="Left" SelectedItem="{Binding BeamDesignFull.BeamModel.SteelPropertiesMaster,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath= "SteelName"  Text="-- Chọn thép chủ --"/>
+            <ComboBox ToolTip="Chọn thép đai" Width="auto" Margin="10,0,0,10" Name="cbxChonThepDai" HorizontalAlignment="Left" SelectedItem="{Binding BeamDesignFull.BeamModel.SteelPropertiesBelt,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath= "SteelName"  Text="-- Chọn thép đai --"/>
+            <TextBox ToolTip="Chọn lớp BTBV" Margin="10,0,0,10" HorizontalAlignment="Left" Width="60" Text="{Binding BeamDesignFull.BeamModel.A,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox ToolTip="Chọn hệ số làm việc của bê tông" Margin="10,0,0,10" HorizontalAlignment="Left" Width="60" Text="{Binding BeamDesignFull.BeamModel.Yb,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Margin="10,0,0,10" HorizontalAlignment="Left" Width="80">
+                <Run Text="&#956; min= "/>
+                <Run Text="{Binding BeamDesignFull.BeamModel.NhuyMin,StringFormat={}{0:P3},Mode= OneWay}"/>
+            </TextBlock>
+            <TextBlock Margin="10,0,0,10" HorizontalAlignment="Left" Width="80">
+                  <Run Text="&#956; max= "/>
+                <Run Text="{Binding BeamDesignFull.BeamModel.NhuyMax,StringFormat={}{0:P3},Mode= OneWay}"/>
+            </TextBlock>
+            <TextBlock Margin="10,0,0,10" HorizontalAlignment="Left" Width="80" >
+                  <Run Text="&#949;r= "/>
+                <Run Text="{Binding BeamDesignFull.BeamModel.EpxilonR,Mode= OneWay}"/>
+            </TextBlock>
+            <Button  Margin="10,0,0,10" HorizontalAlignment="Left" Content="Add" Command="{Binding AddBeamDesignFullCommand}" Width="50" Height="20"/>
+            <Button  Margin="10,0,0,10" HorizontalAlignment="Left" Content="Delete" Width="50" Height="20"/>
+            <Button  Margin="10,0,0,10" HorizontalAlignment="Left" Content="Reset" Width="50" Height="20"/>
+        </DockPanel>
+    </Grid>
+</Window>

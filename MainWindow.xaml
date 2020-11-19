@@ -1,0 +1,45 @@
+﻿<Window x:Class="GoodLuck.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GoodLuck"
+        mc:Ignorable="d"
+        Title="ĐỒ ÁN TỐT NGHIỆP - TRẦN BÁ THANH" Height="400" Width="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock Text="Thông tin dự án" Foreground="Blue"  Margin="5" TextDecorations="Underline" FontSize="15" HorizontalAlignment="Center" ></TextBlock>
+            <DockPanel Height="40" Margin="5">
+                <TextBlock Height="20" VerticalAlignment="Center" Text="Tên công trình:" Width="80" Margin="5,0,0,0"/>
+                <TextBox 
+         VerticalScrollBarVisibility="Visible" TextWrapping="WrapWithOverflow" Text="{Binding FloorInformation.ProjectName , Mode = TwoWay,UpdateSourceTrigger=PropertyChanged}"  Height="40"    Margin="20,0,0,0"/>
+            </DockPanel>
+            <DockPanel Height="40" Margin="5,10,5,0">
+                <TextBlock Height="20" VerticalAlignment="Center" Text="Địa điểm:" Width="80" Margin="5,0,0,0"/>
+                <TextBox   VerticalScrollBarVisibility="Visible" TextWrapping="WrapWithOverflow"  Height="40" Margin="20,0,0,0" Text="{Binding FloorInformation.Address , Mode = TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            </DockPanel>
+            <DockPanel Height="20" Margin="5">
+                <TextBlock Height="20" VerticalAlignment="Center" Text="Tiêu chuẩn:" Width="80" Margin="5,0,0,0"/>
+                <ComboBox Margin="20,0,0,0" >
+                    <ComboBoxItem Content="TCVN 5574-2018" IsSelected="True"/>
+                    <ComboBoxItem Content="TCVN 5574-2012"/>
+                </ComboBox>
+            </DockPanel>
+            <DockPanel Height="20" Margin="5,10,5,0">
+                <TextBlock Height="20" VerticalAlignment="Center" Text="Kỹ sư thiết kế:" Width="80" Margin="5,0,0,0"/>
+                <TextBox  Text="{Binding FloorInformation.EngineerName , Mode = TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="20,0,0,0"/>
+            </DockPanel>
+        </StackPanel>
+        <Button Margin="10" Grid.Row="1" Content="Thiết kế dầm" Command="{Binding DesignBeamCommand}" />
+        <Button Margin="10" Grid.Row="1" Grid.Column="1" Content="Thiết kế cột" />
+        <Button Margin="10"  Grid.Column="1" Content="Thiết kế vách" />
+    </Grid>
+</Window>
