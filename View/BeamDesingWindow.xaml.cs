@@ -32,7 +32,6 @@ namespace GoodLuck.View
             phi2.ItemsSource = ChooseSteel;
             n1.ItemsSource = ChooseQuantity;
             n2.ItemsSource = ChooseQuantity;
-
         }
         public IEnumerable<int> ChooseSteel = new int[15]
         {
@@ -48,6 +47,6 @@ namespace GoodLuck.View
         {
             ViewModel.BeamViewModel beamView = (ViewModel.BeamViewModel)this.DataContext;
             beamView.BeamDesignFull.ResetReinforcementBeamMasters();
-                    }
+        }
     }
 }

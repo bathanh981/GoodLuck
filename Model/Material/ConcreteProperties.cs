@@ -31,8 +31,11 @@ namespace GoodLuck.Model.Material
             Rb_set = rb_set;
             Rbt_set = rbt_set;
         }
+         public double Phib4 { get => 1.5; }
+        public double Phib1 { get => 1 - 0.01 * Rb; }
+        public double Phib3 { get => 0.6; }
+        public double Phib2 { get => 2; }
 
-       
     }
 
 }

@@ -19,16 +19,15 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <StackPanel Margin="5">
-
             <TextBlock HorizontalAlignment="Center" Text="Danh sách dầm đã thiết kế"/>
-            <ListView ItemsSource="{Binding BeamDesignFulls}">
+            <ListView ItemsSource="{Binding BeamDesignFulls, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding BeamDesignFull , Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Width="80" Header="Tầng" DisplayMemberBinding="{Binding BeamDesigns[0].BeamProperties.Story}"/>
                         <GridViewColumn Width="80" Header="Tên CAD">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Width="70" Text="{Binding NameBeam}" IsReadOnly="False"/>
+                                    <TextBox Width="70" TextAlignment="Center" Text="{Binding NameBeam}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -42,8 +41,9 @@
             <DockPanel Margin="0,5,0,0">
                 <Button Width="100" Margin="20,0,0,0" Content="Import excel"/>
                 <Button Width="100" Margin="20,0,0,0" Command="{Binding ExportBeamCommand}" Content="Export excel"/>
-                <Button  HorizontalAlignment="Left"  Margin="20,0,0,0" Width="100" Content="Design"/>
-                <Button  HorizontalAlignment="Left"  Margin="20,0,0,0" Width="100" Content="Xóa"/>
+                <Button  HorizontalAlignment="Left"  Command="{Binding DeleteBeamCommand}"  Margin="20,0,0,0" Width="100" Content="Xóa"/>
+                <TextBlock Width="50" Margin="20,0,0,0" Text="Tên dầm: " HorizontalAlignment="Right"/>
+                <TextBox Width="100" Margin="20,0,0,0" Text="{Binding BeamDesignFull.NameBeam, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             </DockPanel>
         </StackPanel>
         <StackPanel Grid.Column="1" Margin="5">
@@ -56,25 +56,24 @@
                             <GridViewColumn Width="auto" Header="Tên Farme" DisplayMemberBinding="{Binding BeamProperties.NameNumber}"  />
                             <GridViewColumn Width="50" Header="Cao" DisplayMemberBinding="{Binding BeamProperties.Depth}"/>
                             <GridViewColumn Width="50" Header="Rộng" DisplayMemberBinding="{Binding BeamProperties.Width}" />
+                            <GridViewColumn Width="50" Header="Dài" DisplayMemberBinding="{Binding BeamProperties.Lenght}" />
                         </GridView>
                     </ListView.View>
                 </ListView>
                 <StackPanel>
                     <ComboBox ToolTip="Chọn Tổ hợp tính toán" Width="50" Name="combolist" SelectedValue="{Binding Combo}" />
                     <Button  Margin="0,5,0,0" Content="Select" Command="{Binding SelectedCommand}"/>
-                    <Button  Margin="0,5,0,0" Content="Design" Command="{Binding DesignBeamSoBoCommand}"/>
-                    <Button Margin="0,5,0,0" Content="Delete" Command="{Binding DeleteBeamSoBoCommand}"/>
                     <Button Margin="0,5,0,0" Content="Reset" Command="{Binding ResetBeamSoBoCommand}"/>
                 </StackPanel>
             </DockPanel>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
             <TextBlock HorizontalAlignment="Center" Text="Thiết kế dầm"/>
-            <DataGrid Margin="5" ItemsSource="{Binding BeamDesignFull.ReinforcementBeamMasters}"  
+            <DataGrid  Margin="5" ItemsSource="{Binding BeamDesignFull.ReinforcementBeamMasters,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  
                        CanUserSortColumns="False"
                           CanUserAddRows="False"
                           AutoGenerateColumns="False"
-                           Height="auto" MaxHeight="750" MaxColumnWidth="80" CellEditEnding="DataGrid_CellEditEnding">
+                           Height="200" MinHeight="100" MaxHeight="750" MaxColumnWidth="80" CellEditEnding="DataGrid_CellEditEnding">
                     <DataGrid.Columns>
                     <DataGridTextColumn Width="60"  Header="Tên dầm" Binding="{Binding NameFramce}"/>
                     <DataGridTextColumn Width="60"  Header="Vị trí" Binding="{Binding Location}"/>
@@ -97,6 +96,7 @@
                     <DataGridTextColumn Width="55" Header="Check &#956;" Binding="{Binding CheckNhuy,Mode=OneWay}"/>
                     </DataGrid.Columns>
             </DataGrid>
+           
         </StackPanel>
         <DockPanel Grid.Row="2" Grid.ColumnSpan="2"  VerticalAlignment="Bottom">
             <ComboBox ToolTip="Chọn bê tông" Width="auto" Margin="10,0,0,10"  Name="cbxChonBetong" SelectedItem="{Binding BeamDesignFull.BeamModel.ConcreteProperties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   DisplayMemberPath="ConcreteName"  Text="-- Chọn bê tông --"/>
@@ -116,9 +116,6 @@
                   <Run Text="&#949;r= "/>
                 <Run Text="{Binding BeamDesignFull.BeamModel.EpxilonR,Mode= OneWay}"/>
             </TextBlock>
-            <Button  Margin="10,0,0,10" HorizontalAlignment="Left" Content="Add" Command="{Binding AddBeamDesignFullCommand}" Width="50" Height="20"/>
-            <Button  Margin="10,0,0,10" HorizontalAlignment="Left" Content="Delete" Width="50" Height="20"/>
-            <Button  Margin="10,0,0,10" HorizontalAlignment="Left" Content="Reset" Width="50" Height="20"/>
         </DockPanel>
     </Grid>
 </Window>

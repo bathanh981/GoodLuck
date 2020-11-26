@@ -37,5 +37,10 @@ namespace GoodLuck.Model.Beam
         }
 
         public double As { get => Quantity * Math.PI * Math.Pow(Phi / 2, 2); }
+
+        internal void NextPhi()
+        {
+            Phi = (Phi < 8) ? 8 : Phi < 10 ? 10 : Phi < 12 ? 12 : Phi < 14 ? 14 : Phi < 16 ? 16 : Phi < 18 ? 18 : Phi < 20 ? 20 : Phi < 22 ? 22 : Phi < 25 ? 25 : Phi < 28 ? 28 : 30;
+        }
     }
 }

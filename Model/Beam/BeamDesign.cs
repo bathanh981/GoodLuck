@@ -21,7 +21,6 @@ namespace GoodLuck.Model.Beam
         }
 
         private string nameNumber;
-        private ReinforcementBeamBelt reinforcementBeamBelt;
         private ObservableCollection<ReinforcementBeamMaster> reinforcementBeamMasters;
         private FarmeForce beamForce;
         private FarmeProperties beamProperties;
@@ -36,7 +35,6 @@ namespace GoodLuck.Model.Beam
         /// <summary>
         /// Bài toán tính cốt đai dầm
         /// </summary>
-        public ReinforcementBeamBelt ReinforcementBeamBelt { get => reinforcementBeamBelt; set { reinforcementBeamBelt = value; OnPropertyChanged(); } }
         /// <summary>
         /// Bài toán tính thép chủ dầm
         /// </summary>
@@ -49,6 +47,7 @@ namespace GoodLuck.Model.Beam
         public double[] Mgoi2 { get; set; }
         public double[] Mmax { get; set; }
         public double Vmax { get; set; }
+        public double P { get; set; }
 
         public BeamDesign(string nameNumber)
         {
@@ -82,15 +81,14 @@ namespace GoodLuck.Model.Beam
                         Mmax[0] = BeamForce.M3[i];
                         Mmax[1] = BeamForce.ObjSta[i];
                     }
-                    Vmax = (Vmax > Math.Abs(BeamForce.V2[i])) ? Math.Abs(BeamForce.V2[i]) : Vmax;
+                    Vmax = (Vmax < Math.Abs(BeamForce.V2[i])) ? Math.Abs(BeamForce.V2[i]) : Vmax;
+                    P = (P < BeamForce.P[i]) ? BeamForce.P[i] : P;
                 }
                 ReinforcementBeamMasters.Add(new ReinforcementBeamMaster(this, this.Mgoi1[0], this.Mgoi1[1]));
                 ReinforcementBeamMasters.Add(new ReinforcementBeamMaster(this, this.Mmax[0], this.Mmax[1]));
                 ReinforcementBeamMasters.Add(new ReinforcementBeamMaster(this, this.Mgoi2[0], this.Mgoi2[1]));
             }
-
         }
-
         public BeamModel BeamModel { get => beamModel; set => beamModel = value; }
 
         public bool CheckThangHang(BeamDesign beam)
@@ -111,6 +109,8 @@ namespace GoodLuck.Model.Beam
             double cos = (vt1[0] * vt2[0] + vt1[1] * vt2[1] + vt1[2] * vt2[2]) / (Math.Sqrt(vt1[0] * vt1[0] + vt1[1] * vt1[1] + vt1[2] * vt1[2]) * Math.Sqrt(vt2[0] * vt2[0] + vt2[1] * vt2[1] + vt2[2] * vt2[2]));
             return cos == 1 || cos == -1;
         }
+
+
 
     }
 }

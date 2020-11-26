@@ -18,25 +18,27 @@ namespace GoodLuck.Model.Beam
         public ObservableCollection<ReinforcementBeamMaster> ReinforcementBeamMasters { get => reinforcementBeamMasters; set { reinforcementBeamMasters = value; OnPropertyChanged(); } }
         public BeamModel BeamModel { get => beamModel; set { beamModel = value; OnPropertyChanged(); } }
 
+        private ReinforcementBeamBelt reinforcementBeamBelt;
         public double Length
         {
             get
             {
                 double l = 0;
-                foreach(BeamDesign beam in BeamDesigns)
+                foreach (BeamDesign beam in BeamDesigns)
                 {
                     l += beam.BeamProperties.Lenght;
                 }
                 return l;
             }
         }
+
+
         public BeamDesignFull()
         {
             NameBeam = "D-Auto";
             BeamModel = new BeamModel();
             ReinforcementBeamMasters = new ObservableCollection<ReinforcementBeamMaster>();
             BeamDesigns = new ObservableCollection<BeamDesign>();
-
         }
 
         public void AddBeamDesign(BeamDesign beam)
@@ -64,15 +66,42 @@ namespace GoodLuck.Model.Beam
 
         public void ResetReinforcementBeamMasters()
         {
+            if (BeamDesigns.Count == 0) return;
             ReinforcementBeamMasters.Clear();
-            for (int i = 0; i < BeamDesigns.Count; i++)
+            ReinforcementBeamBelt = new ReinforcementBeamBelt(BeamDesigns[0]);
+            foreach (BeamDesign beam in BeamDesigns)
             {
-                foreach (ReinforcementBeamMaster master in BeamDesigns[i].ReinforcementBeamMasters)
+                foreach (ReinforcementBeamMaster master in beam.ReinforcementBeamMasters)
                 {
                     ReinforcementBeamMasters.Add(master);
                 }
             }
         }
+        public double Qmax
+        {
+            get
+            {
+                double max = 0;
+                foreach (BeamDesign beam in BeamDesigns)
+                {
+                    max = (max < beam.Vmax) ? beam.Vmax : max;
+                }
+                return max;
+            }
+        }
+        public double Pmax
+        {
+            get
+            {
+                double max = 0;
+                foreach (BeamDesign beam in BeamDesigns)
+                {
+                    max = (max < beam.P) ? beam.P : max;
+                }
+                return max;
+            }
+        }
 
+        public ReinforcementBeamBelt ReinforcementBeamBelt { get => reinforcementBeamBelt; set => reinforcementBeamBelt = value; }
     }
 }
